@@ -117,43 +117,60 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar.preferredSize.height -
         MediaQuery.of(context).padding.top;
 
+    final txListWidget = Container(
+      height: bodyHeightSize * 0.7,
+      child: TransactionsList(
+        transactions: transactions,
+        removeTransaction: removeTransaction,
+      ),
+    );
+
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+
     return Scaffold(
       appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Container(
-              height: bodyHeightSize * 0.15,
-              child: Row(
-                children: <Widget>[
-                  Text(
-                    _showChart ? 'Show transactions' : 'Show charts',
-                    style: TextStyle(fontSize: 15),
-                  ),
-                  Switch(
-                    value: _showChart,
-                    onChanged: (val) {
-                      setState(() {
-                        _showChart = val;
-                      });
-                    },
-                  ),
-                ],
+            if (isLandscape)
+              Container(
+                height: bodyHeightSize * 0.15,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      _showChart ? 'Show transactions' : 'Show charts',
+                      style: TextStyle(fontSize: 15),
+                    ),
+                    Switch(
+                      value: _showChart,
+                      onChanged: (val) {
+                        setState(() {
+                          _showChart = val;
+                        });
+                      },
+                    ),
+                  ],
+                ),
               ),
-            ),
-            _showChart ? Container(
-              height: bodyHeightSize * 0.85,
-              child: Chart(
-                recentTransaction: _recentTransactions,
+            if (!isLandscape)
+              Container(
+                height: bodyHeightSize * 0.3,
+                child: Chart(
+                  recentTransaction: _recentTransactions,
+                ),
               ),
-            ) :
-            Container(
-              height: bodyHeightSize * 0.85,
-              child: TransactionsList(
-                transactions: transactions,
-                removeTransaction: removeTransaction,
-              ),
-            ),
+            if (!isLandscape) txListWidget,
+            if (isLandscape)
+              _showChart
+                  ? Container(
+                      height: bodyHeightSize * 0.85,
+                      child: Chart(
+                        recentTransaction: _recentTransactions,
+                      ),
+                    )
+                  : txListWidget,
           ],
         ),
       ),

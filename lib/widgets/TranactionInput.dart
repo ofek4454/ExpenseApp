@@ -15,7 +15,7 @@ class _TransactionInputState extends State<TransactionInput> {
   final titleController = TextEditingController();
   final amountController = TextEditingController();
   final dateController = TextEditingController();
-  DateTime _userDate;
+  DateTime _userDate = DateTime.now();
 
   void submitData() {
     if (amountController.text.isEmpty ||
@@ -33,7 +33,7 @@ class _TransactionInputState extends State<TransactionInput> {
           duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
       return;
     }
-    
+
     widget.addHandler(
       title: inputTitle,
       amount: inputAmount,
@@ -66,30 +66,39 @@ class _TransactionInputState extends State<TransactionInput> {
       children: <Widget>[
         Card(
           elevation: 5,
-          child: Column(
-            children: <Widget>[
-              TextField(
-                decoration: InputDecoration(
-                    fillColor: Colors.blue[100],
-                    labelText: 'title',
-                    filled: true),
-                controller: titleController,
-                onSubmitted: (_) => submitData(),
-              ),
-              Container(
-                height: 3,
-                color: Theme.of(context).primaryColorLight,
-              ),
-              TextField(
-                decoration: InputDecoration(
-                    fillColor: Colors.blue[100],
-                    labelText: 'amount',
-                    filled: true),
-                controller: amountController,
-                keyboardType: TextInputType.number,
-                onSubmitted: (_) => submitData(),
-              ),
-            ],
+          child: Container(
+            color: Theme.of(context).primaryColorLight,
+            padding: EdgeInsets.only(
+              left: 10,
+              right: 10,
+              top: 10,
+              bottom: MediaQuery.of(context).viewInsets.bottom + 10,
+            ),
+            child: Column(
+              children: <Widget>[
+                TextField(
+                  decoration: InputDecoration(
+                      fillColor: Colors.blue[100],
+                      labelText: 'title',
+                      filled: true),
+                  controller: titleController,
+                  onSubmitted: (_) => submitData(),
+                ),
+                Container(
+                  height: 3,
+                  color: Theme.of(context).primaryColorLight,
+                ),
+                TextField(
+                  decoration: InputDecoration(
+                      fillColor: Colors.blue[100],
+                      labelText: 'amount',
+                      filled: true),
+                  controller: amountController,
+                  keyboardType: TextInputType.number,
+                  onSubmitted: (_) => submitData(),
+                ),
+              ],
+            ),
           ),
         ),
         Container(
