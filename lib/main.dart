@@ -102,12 +102,48 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context);
-    final isLandscape = mediaQuery.orientation == Orientation.landscape;
+  List<Widget> _buildLandscapeContent(double bodyHeightSize, Widget txListWidget){
+    return [Container(
+                height: bodyHeightSize * 0.15,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      _showChart ? 'Show transactions' : 'Show charts',
+                      style: Theme.of(context).textTheme.title,
+                    ),
+                    Switch.adaptive(
+                      activeColor: Theme.of(context).accentColor,
+                      value: _showChart,
+                      onChanged: (val) {
+                        setState(() {
+                          _showChart = val;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ),_showChart
+                  ? Container(
+                      height: bodyHeightSize * 0.83,
+                      child: Chart(
+                        recentTransaction: _recentTransactions,
+                      ),
+                    )
+                  : txListWidget,];
+  }
 
-    final PreferredSizeWidget appBar = Platform.isIOS
+  List<Widget> _buildPortraitContent(double bodyHeightSize, Widget txListWidget){
+    return [Container(
+                height: bodyHeightSize * 0.3,
+                child: Chart(
+                  recentTransaction: _recentTransactions,
+                ),
+              ),SizedBox(height: bodyHeightSize * 0.02,), txListWidget,];
+  }
+
+  Widget _buildAppBar(bool isLandscape){
+    return Platform.isIOS
         ? CupertinoNavigationBar(
             middle: const Text(
               'Expensses app',
@@ -134,13 +170,21 @@ class _MyHomePageState extends State<MyHomePage> {
               )
             ],
           );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final isLandscape = mediaQuery.orientation == Orientation.landscape;
+
+    final PreferredSizeWidget appBar = _buildAppBar(isLandscape);
 
     final bodyHeightSize = mediaQuery.size.height -
         appBar.preferredSize.height -
         mediaQuery.padding.top;
 
     final txListWidget = Container(
-      height: bodyHeightSize * 0.7,
+      height: bodyHeightSize * 0.68,
       child: TransactionsList(
         transactions: transactions,
         removeTransaction: removeTransaction,
@@ -151,46 +195,8 @@ class _MyHomePageState extends State<MyHomePage> {
       child: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            if (isLandscape)
-              Container(
-                height: bodyHeightSize * 0.15,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      _showChart ? 'Show transactions' : 'Show charts',
-                      style: Theme.of(context).textTheme.title,
-                    ),
-                    Switch.adaptive(
-                      activeColor: Theme.of(context).accentColor,
-                      value: _showChart,
-                      onChanged: (val) {
-                        setState(() {
-                          _showChart = val;
-                        });
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            if (!isLandscape)
-              Container(
-                height: bodyHeightSize * 0.3,
-                child: Chart(
-                  recentTransaction: _recentTransactions,
-                ),
-              ),
-            if (!isLandscape) SizedBox(height: bodyHeightSize * 0.02,),
-            if (!isLandscape) txListWidget,
-            if (isLandscape)
-              _showChart
-                  ? Container(
-                      height: bodyHeightSize * 0.83,
-                      child: Chart(
-                        recentTransaction: _recentTransactions,
-                      ),
-                    )
-                  : txListWidget,
+            if (isLandscape) ..._buildLandscapeContent(bodyHeightSize , txListWidget),
+            if (!isLandscape) ..._buildPortraitContent(bodyHeightSize , txListWidget),
           ],
         ),
       ),
