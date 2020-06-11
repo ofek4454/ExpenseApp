@@ -18,7 +18,7 @@ class TransactionsList extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Image.asset('assets/images/empty.png'),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   Text(
                     'You haven\'t coduced \n any transactions.',
                     textAlign: TextAlign.center,
@@ -37,7 +37,7 @@ class TransactionsList extends StatelessWidget {
             itemBuilder: (context, index) {
               return Card(
                 elevation: 8,
-                margin: EdgeInsets.symmetric(vertical: 4, horizontal: 6),
+                margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 6),
                 child: ListTile(
                   leading: CircleAvatar(
                     radius: 30,
@@ -65,7 +65,7 @@ class TransactionsList extends StatelessWidget {
                             Icons.delete_outline,
                             color: Theme.of(context).errorColor,
                           ),
-                          label: Text('delete'.toUpperCase()),
+                          label: const Text('DELETE'),
                         )
                       : IconButton(
                           icon: Icon(
@@ -78,73 +78,6 @@ class TransactionsList extends StatelessWidget {
                         ),
                 ),
               );
-
-              /*return Card(
-                  elevation: 8,
-                  shadowColor: Colors.black38,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Container(
-                            margin: EdgeInsets.symmetric(
-                              vertical: 15,
-                              horizontal: 15,
-                            ),
-                            padding: EdgeInsets.all(20),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                width: 2,
-                                color: Theme.of(context).primaryColorDark,
-                              ),
-                              //shape: BoxShape.circle,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                            child: Text(
-                              '\$${transactions[index].amount.toStringAsFixed(2)}',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                transactions[index].name,
-                                style: Theme.of(context).textTheme.title,
-                              ),
-                              SizedBox(height: 5),
-                              Text(
-                                DateFormat("HH:mm, dd/MM/yyyy")
-                                    .format(transactions[index].date),
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      IconButton(
-                        icon: Icon(
-                          Icons.delete_outline,
-                          size: 25,
-                          color: Colors.red,
-                        ),
-                        onPressed: () => removeTransaction(transactions[index]),
-                      )
-                    ],
-                  ),
-                );*/
             },
           );
   }

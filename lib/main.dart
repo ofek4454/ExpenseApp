@@ -23,17 +23,17 @@ class MyApp extends StatelessWidget {
         accentColor: Colors.indigoAccent,
         fontFamily: 'OleoScript',
         textTheme: ThemeData.light().textTheme.copyWith(
-              title: TextStyle(
+              title: const TextStyle(
                 fontFamily: 'BalsamiqSans',
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
               ),
               button:
-                  TextStyle(color: Colors.white, fontFamily: 'BalsamiqSans'),
+                  const TextStyle(color: Colors.white, fontFamily: 'BalsamiqSans'),
             ),
         appBarTheme: AppBarTheme(
           textTheme: ThemeData.light().textTheme.copyWith(
-                title: TextStyle(
+                title: const TextStyle(
                   fontFamily: 'BalsamiqSans',
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
@@ -107,7 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     final PreferredSizeWidget appBar = Platform.isIOS
         ? CupertinoNavigationBar(
-            middle: Text(
+            middle: const Text(
               'Expensses app',
             ),
             trailing: Row(
@@ -115,19 +115,19 @@ class _MyHomePageState extends State<MyHomePage> {
               children: <Widget>[
                 GestureDetector(
                   onTap: () => _openBottomSheet(context),
-                  child: Icon(CupertinoIcons.add),
+                  child: const Icon(CupertinoIcons.add),
                 )
               ],
             ),
           )
         : AppBar(
             centerTitle: true,
-            title: Text(
+            title: const Text(
               'Expensses app',
             ),
             actions: <Widget>[
               IconButton(
-                icon: Icon(Icons.add),
+                icon: const Icon(Icons.add),
                 onPressed: () => _openBottomSheet(context),
               )
             ],
@@ -147,49 +147,51 @@ class _MyHomePageState extends State<MyHomePage> {
 
     final isLandscape = mediaQuery.orientation == Orientation.landscape;
 
-    final pageBody = SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          if (isLandscape)
-            Container(
-              height: bodyHeightSize * 0.15,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    _showChart ? 'Show transactions' : 'Show charts',
-                    style: TextStyle(fontSize: 15),
-                  ),
-                  Switch.adaptive(
-                    activeColor: Theme.of(context).accentColor,
-                    value: _showChart,
-                    onChanged: (val) {
-                      setState(() {
-                        _showChart = val;
-                      });
-                    },
-                  ),
-                ],
-              ),
-            ),
-          if (!isLandscape)
-            Container(
-              height: bodyHeightSize * 0.3,
-              child: Chart(
-                recentTransaction: _recentTransactions,
-              ),
-            ),
-          if (!isLandscape) txListWidget,
-          if (isLandscape)
-            _showChart
-                ? Container(
-                    height: bodyHeightSize * 0.85,
-                    child: Chart(
-                      recentTransaction: _recentTransactions,
+    final pageBody = SafeArea(
+      child: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            if (isLandscape)
+              Container(
+                height: bodyHeightSize * 0.15,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      _showChart ? 'Show transactions' : 'Show charts',
+                      style: Theme.of(context).textTheme.title,
                     ),
-                  )
-                : txListWidget,
-        ],
+                    Switch.adaptive(
+                      activeColor: Theme.of(context).accentColor,
+                      value: _showChart,
+                      onChanged: (val) {
+                        setState(() {
+                          _showChart = val;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            if (!isLandscape)
+              Container(
+                height: bodyHeightSize * 0.3,
+                child: Chart(
+                  recentTransaction: _recentTransactions,
+                ),
+              ),
+            if (!isLandscape) txListWidget,
+            if (isLandscape)
+              _showChart
+                  ? Container(
+                      height: bodyHeightSize * 0.85,
+                      child: Chart(
+                        recentTransaction: _recentTransactions,
+                      ),
+                    )
+                  : txListWidget,
+          ],
+        ),
       ),
     );
 
@@ -198,7 +200,7 @@ class _MyHomePageState extends State<MyHomePage> {
             appBar: appBar,
             body: pageBody,
             floatingActionButton: FloatingActionButton(
-              child: Icon(Icons.add),
+              child: const Icon(Icons.add),
               onPressed: () => _openBottomSheet(context),
             ),
           )

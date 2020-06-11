@@ -1,6 +1,12 @@
+import 'dart:io';
+
+import 'package:expenseApp/widgets/AdaptiveRaisedButton.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:toast/toast.dart';
+
+import './AdaptiveFlatButton.dart';
 
 class TransactionInput extends StatefulWidget {
   final Function addHandler;
@@ -103,7 +109,7 @@ class _TransactionInputState extends State<TransactionInput> {
         ),
         Container(
           height: 50,
-          margin: EdgeInsets.only(left: 10),
+          margin: const EdgeInsets.only(left: 10),
           child: Row(
             children: <Widget>[
               Expanded(
@@ -113,31 +119,18 @@ class _TransactionInputState extends State<TransactionInput> {
                       : 'picked date: ${DateFormat('dd/MM/yyyy').format(_userDate)}',
                 ),
               ),
-              FlatButton(
-                child: Text(
-                  'Choose a date',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).primaryColor),
-                ),
-                onPressed: popUpDatePicker,
-              )
+              AdaptiveFlatButton(
+                title: 'Choose a date',
+                handler: popUpDatePicker,
+              ),
             ],
           ),
         ),
         Container(
-          margin: EdgeInsets.only(right: 10),
-          child: RaisedButton(
-            child: Text(
-              'Add transaction',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            textColor: Theme.of(context).textTheme.button.color,
-            color: Theme.of(context).primaryColor,
-            onPressed: submitData,
+          margin: const EdgeInsets.only(right: 10),
+          child: AdaptiveRaisedButton(
+            title: 'Add transaction',
+            handler: submitData,
           ),
         ),
       ],
