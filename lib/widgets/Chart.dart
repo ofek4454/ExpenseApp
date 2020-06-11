@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -34,27 +36,59 @@ class Chart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 6,
-      margin: const EdgeInsets.all(20),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: groupedTransactionVlaues.map((data) {
-            return Flexible(
-              fit: FlexFit.tight,
-              child: ChartBar(
-                label: data['day'],
-                spendingAmount: data['amount'],
-                spendingPctOfTotal: totalAmount == 0.0
-                    ? 0.0
-                    : (data['amount'] as double) / totalAmount,
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+
+    return Column(
+      mainAxisSize: isLandscape ? MainAxisSize.max : MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: <Widget>[
+        Flexible(
+          flex: isLandscape ? 7 : 10,
+          child: Card(
+            elevation: 6,
+            margin: const EdgeInsets.only(
+              top: 20,
+              right: 20,
+              left: 20,
+              bottom: 5,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: groupedTransactionVlaues.map((data) {
+                  return Flexible(
+                    fit: FlexFit.tight,
+                    child: ChartBar(
+                      label: data['day'],
+                      spendingAmount: data['amount'],
+                      spendingPctOfTotal: totalAmount == 0.0
+                          ? 0.0
+                          : (data['amount'] as double) / totalAmount,
+                    ),
+                  );
+                }).toList(),
               ),
-            );
-          }).toList(),
+            ),
+          ),
         ),
-      ),
+        Flexible(
+          flex: isLandscape ? 3 : 1,
+          child: RichText(
+              text: TextSpan(
+                style: DefaultTextStyle.of(context).style,
+                children: <TextSpan>[
+                  TextSpan(text: 'total weekly spending: '),
+                  TextSpan(
+                    text: '\$$totalAmount',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+        ),
+      ],
     );
   }
 }

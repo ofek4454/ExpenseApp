@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../models/Transaction.dart';
+import './transaction_item.dart';
 
 class TransactionsList extends StatelessWidget {
   final List<Transaction> transactions;
@@ -35,49 +36,7 @@ class TransactionsList extends StatelessWidget {
         : ListView.builder(
             itemCount: transactions.length,
             itemBuilder: (context, index) {
-              return Card(
-                elevation: 8,
-                margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 6),
-                child: ListTile(
-                  leading: CircleAvatar(
-                    radius: 30,
-                    child: Padding(
-                      padding: EdgeInsets.all(5),
-                      child: FittedBox(
-                        child: Text(
-                            '\$${transactions[index].amount.toStringAsFixed(2)}'),
-                      ),
-                    ),
-                  ),
-                  title: Text(
-                    transactions[index].name,
-                    style: Theme.of(context).textTheme.title,
-                  ),
-                  subtitle: Text(
-                    DateFormat("dd/MM/yyyy").format(transactions[index].date),
-                  ),
-                  trailing: MediaQuery.of(context).size.width > 500
-                      ? FlatButton.icon(
-                          textColor: Theme.of(context).errorColor,
-                          onPressed: () =>
-                              removeTransaction(transactions[index].id),
-                          icon: Icon(
-                            Icons.delete_outline,
-                            color: Theme.of(context).errorColor,
-                          ),
-                          label: const Text('DELETE'),
-                        )
-                      : IconButton(
-                          icon: Icon(
-                            Icons.delete_outline,
-                            size: 25,
-                            color: Theme.of(context).errorColor,
-                          ),
-                          onPressed: () =>
-                              removeTransaction(transactions[index].id),
-                        ),
-                ),
-              );
+              return TransactionItem(transaction: transactions[index], removeTransaction: removeTransaction);
             },
           );
   }

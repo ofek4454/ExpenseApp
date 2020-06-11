@@ -67,73 +67,75 @@ class _TransactionInputState extends State<TransactionInput> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: <Widget>[
-        Card(
-          elevation: 5,
-          child: Container(
-            color: Theme.of(context).primaryColorLight,
-            padding: EdgeInsets.only(
-              left: 10,
-              right: 10,
-              top: 10,
-              bottom: MediaQuery.of(context).viewInsets.bottom + 10,
+    return LayoutBuilder(builder: (ctx, constraints) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: <Widget>[
+          Card(
+            elevation: 5,
+            child: Container(
+              color: Theme.of(context).primaryColorLight,
+              padding: EdgeInsets.only(
+                left: constraints.maxWidth * 0.02,
+                right: constraints.maxWidth * 0.02,
+                top: constraints.maxHeight * 0.05,
+                bottom: MediaQuery.of(context).viewInsets.bottom + constraints.maxHeight * 0.05,
+              ),
+              child: Column(
+                children: <Widget>[
+                  TextField(
+                    decoration: InputDecoration(
+                        fillColor: Colors.blue[100],
+                        labelText: 'title',
+                        filled: true),
+                    controller: titleController,
+                    //onSubmitted: (_) => submitData(),
+                  ),
+                  Container(
+                    height: constraints.maxHeight * 0.02,
+                    color: Theme.of(context).primaryColorLight,
+                  ),
+                  TextField(
+                    decoration: InputDecoration(
+                        fillColor: Colors.blue[100],
+                        labelText: 'amount',
+                        filled: true),
+                    controller: amountController,
+                    keyboardType: TextInputType.number,
+                    //onSubmitted: (_) => submitData(),
+                  ),
+                ],
+              ),
             ),
-            child: Column(
+          ),
+          Container(
+            height: constraints.maxHeight * 0.1,
+            margin: const EdgeInsets.only(left: 10),
+            child: Row(
               children: <Widget>[
-                TextField(
-                  decoration: InputDecoration(
-                      fillColor: Colors.blue[100],
-                      labelText: 'title',
-                      filled: true),
-                  controller: titleController,
-                  onSubmitted: (_) => submitData(),
+                Expanded(
+                  child: Text(
+                    _userDate == null
+                        ? 'no date chossen'
+                        : 'picked date: ${DateFormat('dd/MM/yyyy').format(_userDate)}',
+                  ),
                 ),
-                Container(
-                  height: 3,
-                  color: Theme.of(context).primaryColorLight,
-                ),
-                TextField(
-                  decoration: InputDecoration(
-                      fillColor: Colors.blue[100],
-                      labelText: 'amount',
-                      filled: true),
-                  controller: amountController,
-                  keyboardType: TextInputType.number,
-                  onSubmitted: (_) => submitData(),
+                AdaptiveFlatButton(
+                  title: 'Choose a date',
+                  handler: popUpDatePicker,
                 ),
               ],
             ),
           ),
-        ),
-        Container(
-          height: 50,
-          margin: const EdgeInsets.only(left: 10),
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: Text(
-                  _userDate == null
-                      ? 'no date chossen'
-                      : 'picked date: ${DateFormat('dd/MM/yyyy').format(_userDate)}',
-                ),
-              ),
-              AdaptiveFlatButton(
-                title: 'Choose a date',
-                handler: popUpDatePicker,
-              ),
-            ],
+          Container(
+            margin: const EdgeInsets.only(right: 10),
+            child: AdaptiveRaisedButton(
+              title: 'Add transaction',
+              handler: submitData,
+            ),
           ),
-        ),
-        Container(
-          margin: const EdgeInsets.only(right: 10),
-          child: AdaptiveRaisedButton(
-            title: 'Add transaction',
-            handler: submitData,
-          ),
-        ),
-      ],
-    );
+        ],
+      );
+    });
   }
 }

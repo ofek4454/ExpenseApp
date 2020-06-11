@@ -87,8 +87,9 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void _openBottomSheet(BuildContext ctx) {
+  void _openBottomSheet(BuildContext ctx , bool isLandscape) {
     showModalBottomSheet(
+      isScrollControlled: isLandscape ? true : false,
       context: ctx,
       backgroundColor: Theme.of(context).primaryColorLight,
       builder: (_) {
@@ -104,6 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
+    final isLandscape = mediaQuery.orientation == Orientation.landscape;
 
     final PreferredSizeWidget appBar = Platform.isIOS
         ? CupertinoNavigationBar(
@@ -114,7 +116,7 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 GestureDetector(
-                  onTap: () => _openBottomSheet(context),
+                  onTap: () => _openBottomSheet(context , isLandscape),
                   child: const Icon(CupertinoIcons.add),
                 )
               ],
@@ -128,7 +130,7 @@ class _MyHomePageState extends State<MyHomePage> {
             actions: <Widget>[
               IconButton(
                 icon: const Icon(Icons.add),
-                onPressed: () => _openBottomSheet(context),
+                onPressed: () => _openBottomSheet(context , isLandscape),
               )
             ],
           );
@@ -144,8 +146,6 @@ class _MyHomePageState extends State<MyHomePage> {
         removeTransaction: removeTransaction,
       ),
     );
-
-    final isLandscape = mediaQuery.orientation == Orientation.landscape;
 
     final pageBody = SafeArea(
       child: SingleChildScrollView(
@@ -180,11 +180,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   recentTransaction: _recentTransactions,
                 ),
               ),
+            if (!isLandscape) SizedBox(height: bodyHeightSize * 0.02,),
             if (!isLandscape) txListWidget,
             if (isLandscape)
               _showChart
                   ? Container(
-                      height: bodyHeightSize * 0.85,
+                      height: bodyHeightSize * 0.83,
                       child: Chart(
                         recentTransaction: _recentTransactions,
                       ),
@@ -201,7 +202,7 @@ class _MyHomePageState extends State<MyHomePage> {
             body: pageBody,
             floatingActionButton: FloatingActionButton(
               child: const Icon(Icons.add),
-              onPressed: () => _openBottomSheet(context),
+              onPressed: () => _openBottomSheet(context , isLandscape),
             ),
           )
         : CupertinoPageScaffold(
