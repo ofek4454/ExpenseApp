@@ -25,6 +25,10 @@ dependencies:
     sdk: flutter
   intl: ^0.16.1
   toast: ^0.1.5
+  provider: ^4.3.3
+  get_it: ^5.0.6
+  shared_preferences: ^0.5.12+4
+  uuid: ^2.2.2
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -66,7 +70,7 @@ flutter:
     - family: BalsamiqSans
       fonts:
         - asset: assets/fonts/BalsamiqSans-Regular.ttf
-        - asset: assets\fonts\BalsamiqSans-Bold.ttf
+        - asset: assets/fonts/BalsamiqSans-Bold.ttf
           weight: 700
     - family: OleoScript
       fonts:

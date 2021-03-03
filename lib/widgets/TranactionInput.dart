@@ -1,18 +1,14 @@
-import 'dart:io';
-
+import 'package:expenseApp/providers/transactions_provider.dart';
 import 'package:expenseApp/widgets/AdaptiveRaisedButton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
 
 import './AdaptiveFlatButton.dart';
 
 class TransactionInput extends StatefulWidget {
-  final Function addHandler;
-
-  TransactionInput(this.addHandler);
-
   @override
   _TransactionInputState createState() => _TransactionInputState();
 }
@@ -39,8 +35,7 @@ class _TransactionInputState extends State<TransactionInput> {
           duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
       return;
     }
-
-    widget.addHandler(
+    Provider.of<TransactionsProvider>(context, listen: false).addTransaction(
       title: inputTitle,
       amount: inputAmount,
       date: _userDate,
@@ -79,7 +74,8 @@ class _TransactionInputState extends State<TransactionInput> {
                 left: constraints.maxWidth * 0.02,
                 right: constraints.maxWidth * 0.02,
                 top: constraints.maxHeight * 0.05,
-                bottom: MediaQuery.of(context).viewInsets.bottom + constraints.maxHeight * 0.05,
+                bottom: MediaQuery.of(context).viewInsets.bottom +
+                    constraints.maxHeight * 0.05,
               ),
               child: Column(
                 children: <Widget>[

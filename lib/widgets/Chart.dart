@@ -1,15 +1,15 @@
-import 'dart:io';
-
+import 'package:expenseApp/providers/transactions_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../models/Transaction.dart';
 import './ChartBar.dart';
 
 class Chart extends StatelessWidget {
-  final List<Transaction> recentTransaction;
+  List<Transaction> recentTransaction;
 
-  Chart({this.recentTransaction});
+  Chart();
 
   List<Map<String, Object>> get groupedTransactionVlaues {
     return List.generate(7, (index) {
@@ -36,6 +36,11 @@ class Chart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (recentTransaction == null) {
+      recentTransaction =
+          Provider.of<TransactionsProvider>(context, listen: false)
+              .recentTransactions;
+    }
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
 
@@ -76,17 +81,17 @@ class Chart extends StatelessWidget {
         Flexible(
           flex: isLandscape ? 3 : 1,
           child: RichText(
-              text: TextSpan(
-                style: DefaultTextStyle.of(context).style,
-                children: <TextSpan>[
-                  TextSpan(text: 'total weekly spending: '),
-                  TextSpan(
-                    text: '\$$totalAmount',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
+            text: TextSpan(
+              style: Theme.of(context).textTheme.headline6,
+              children: <TextSpan>[
+                TextSpan(text: 'total weekly spending: '),
+                TextSpan(
+                  text: '\$$totalAmount',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ],
             ),
+          ),
         ),
       ],
     );

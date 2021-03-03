@@ -1,17 +1,16 @@
+import 'package:expenseApp/providers/transactions_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../models/Transaction.dart';
 
 class TransactionItem extends StatelessWidget {
-  
   final Transaction transaction;
-  final Function removeTransaction;
 
   const TransactionItem({
     Key key,
     @required this.transaction,
-    @required this.removeTransaction,
   }) : super(key: key);
 
   @override
@@ -25,14 +24,13 @@ class TransactionItem extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.all(5),
             child: FittedBox(
-              child: Text(
-                  '\$${transaction.amount.toStringAsFixed(2)}'),
+              child: Text('\$${transaction.amount.toStringAsFixed(2)}'),
             ),
           ),
         ),
         title: Text(
           transaction.name,
-          style: Theme.of(context).textTheme.title,
+          style: Theme.of(context).textTheme.headline6,
         ),
         subtitle: Text(
           DateFormat("dd/MM/yyyy").format(transaction.date),
@@ -41,7 +39,8 @@ class TransactionItem extends StatelessWidget {
             ? FlatButton.icon(
                 textColor: Theme.of(context).errorColor,
                 onPressed: () =>
-                    removeTransaction(transaction.id),
+                    Provider.of<TransactionsProvider>(context, listen: false)
+                        .removeTransaction(transaction.id),
                 icon: Icon(
                   Icons.delete_outline,
                   color: Theme.of(context).errorColor,
@@ -55,7 +54,8 @@ class TransactionItem extends StatelessWidget {
                   color: Theme.of(context).errorColor,
                 ),
                 onPressed: () =>
-                    removeTransaction(transaction.id),
+                    Provider.of<TransactionsProvider>(context, listen: false)
+                        .removeTransaction(transaction.id),
               ),
       ),
     );

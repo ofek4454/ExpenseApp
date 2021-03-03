@@ -1,3 +1,4 @@
+import 'package:expenseApp/di/di.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -6,9 +7,8 @@ import './transaction_item.dart';
 
 class TransactionsList extends StatelessWidget {
   final List<Transaction> transactions;
-  final Function removeTransaction;
 
-  TransactionsList({@required this.transactions, this.removeTransaction});
+  TransactionsList() : transactions = getIt();
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +23,11 @@ class TransactionsList extends StatelessWidget {
                   Text(
                     'You haven\'t coduced \n any transactions.',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontFamily: 'BalsamiqSans',
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30,
-                        color: Colors.pink[200]),
+                    style: Theme.of(context).textTheme.headline6.copyWith(
+                          color: Colors.pink[200],
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                        ),
                   )
                 ],
               ),
@@ -36,7 +36,9 @@ class TransactionsList extends StatelessWidget {
         : ListView.builder(
             itemCount: transactions.length,
             itemBuilder: (context, index) {
-              return TransactionItem(transaction: transactions[index], removeTransaction: removeTransaction);
+              return TransactionItem(
+                transaction: transactions[index],
+              );
             },
           );
   }
